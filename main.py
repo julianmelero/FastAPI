@@ -1,25 +1,46 @@
 #Python
 from typing import Optional
-from fastapi.param_functions import Query, Path
+from enum import Enum
+
 
 #Pydantic
 from pydantic import BaseModel
-
+from pydantic import Field
 
 # FastAPI
 from fastapi import FastAPI
-from fastapi import Body, Query
+from fastapi import Body, Query, Path
 
 app = FastAPI()
 
 # Models
 
+class HeairColor(Enum):
+    white = "white"
+    brown = "brown"
+    black = "black"
+    blonde = "blone"
+    red = "red"
+
+
 class Person(BaseModel):
-    first_name: str
-    last_name: str
-    age: int
-    hair_color: Optional[str] = None
-    is_married: Optional[bool] = None
+    first_name: str = Field(
+        ...,
+        min_length=1,
+        max_length=50
+        )
+    last_name: str = Field(
+        ...,
+        min_length=1,
+        max_length=50
+        )
+    age: int = Field(
+        ...,
+        gt=0,
+        lt=115       
+        )
+    hair_color: Optional[HeairColor] = Field(default=None)
+    is_married: Optional[bool] = Field(default=None)
 
 
 class Location(BaseModel):
