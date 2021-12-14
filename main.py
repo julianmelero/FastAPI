@@ -1,9 +1,9 @@
-#Python
+# Python
 from typing import Optional
 from enum import Enum
 
 
-#Pydantic
+# Pydantic
 from pydantic import BaseModel
 from pydantic import Field
 
@@ -14,6 +14,7 @@ from fastapi import Body, Query, Path
 app = FastAPI()
 
 # Models
+
 
 class HeairColor(Enum):
     white = "white"
@@ -27,35 +28,50 @@ class Person(BaseModel):
     first_name: str = Field(
         ...,
         min_length=1,
-        max_length=50
-        )
+        max_length=50,
+        example="Julián"
+    )
     last_name: str = Field(
         ...,
         min_length=1,
-        max_length=50
-        )
+        max_length=50,
+        example="Melero"
+    )
     age: int = Field(
         ...,
         gt=0,
-        lt=115       
-        )
-    hair_color: Optional[HeairColor] = Field(default=None)
-    is_married: Optional[bool] = Field(default=None)
+        lt=115,
+        example=38
+    )
+    hair_color: Optional[HeairColor] = Field(default=None, example="Brown")
+    is_married: Optional[bool] = Field(default=None, exampple="True")
+
+    """class Config:
+        schema_extra = {
+            "example": {
+                "first_name": "Julián",
+                "last_name": "Melero",
+                "age": 38,
+                "hair_color": "brown",
+                "is_married": True
+            }
+        }"""
 
 
 class Location(BaseModel):
-    city: str
-    state: str
-    country: str
+    city: str = Field(example="València")
+    state: str = Field(example="València")
+    country: str = Field(example="Spain")
 
 
 @app.get("/")
 def home():
     return {
-        "Hello" : "World"
+        "Hello": "World"
     }
 
 # Request and Response
+
 
 @app.post("/person/new")
 def create_person(person: Person = Body(...)):
@@ -69,19 +85,20 @@ def show_person(
     name: Optional[str] = Query(
         None, min_length=1,
         max_length=50,
-        title= "Person Name",
+        title="Person Name",
         description="This is the person name. Between 1 and 50 characters"
-        ),
+    ),
     age: Optional[int] = Query(
         ...,
         gt=17,
         title="Person Age",
         description="This is the person age. Required."
-        )
+    )
 ):
     return {name: age}
 
 # Validaciones: PAth Parameteres
+
 
 @app.get("/person/detail/{person_id}")
 def show_person(
@@ -90,11 +107,12 @@ def show_person(
         gt=0,
         title="Person ID",
         description="This is the person ID. Required"
-        )
+    )
 ):
     return {person_id: "It exists!"}
 
 # Validaciones: Request Body
+
 
 @app.put("/person/{person_id}")
 def update_person(
