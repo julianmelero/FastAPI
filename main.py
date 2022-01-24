@@ -64,7 +64,7 @@ class Location(BaseModel):
     country: str = Field(example="Spain")
 
 
-@app.get("/")
+@app.get("/", status_code=200)
 def home():
     return {
         "Hello": "World"
