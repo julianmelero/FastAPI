@@ -45,6 +45,30 @@ class Person(BaseModel):
     )
     hair_color: Optional[HeairColor] = Field(default=None, example="Brown")
     is_married: Optional[bool] = Field(default=None, exampple="True")
+    password: str = Field(..., min_length=8)
+
+
+class PersonOut(BaseModel):
+    first_name: str = Field(
+        ...,
+        min_length=1,
+        max_length=50,
+        example="Julián"
+    )
+    last_name: str = Field(
+        ...,
+        min_length=1,
+        max_length=50,
+        example="Melero"
+    )
+    age: int = Field(
+        ...,
+        gt=0,
+        lt=115,
+        example=38
+    )
+    hair_color: Optional[HeairColor] = Field(default=None, example="Brown")
+    is_married: Optional[bool] = Field(default=None, exampple="True")    
 
     """class Config:
         schema_extra = {
@@ -73,7 +97,7 @@ def home():
 # Request and Response
 
 
-@app.post("/person/new")
+@app.post("/person/new", response_model=PersonOut)
 def create_person(person: Person = Body(...)):
     return person
 
