@@ -21,27 +21,9 @@ app.include_router(routes.router, prefix="/api/v1")
 
 @app.get("/", tags=["General"], status_code=status.HTTP_200_OK)
 def home():
-    return ({
-        "name": "World"
-    })
+    return ("Hi! See documentation at /docs!")
 
 
 
 # Validaciones: Request Body
 
-
-@app.put("/person/{person_id}")
-def update_person(
-    person_id: int = Path(
-        ...,
-        title="Person ID",
-        description="This is the person ID.",
-        gt=0,
-        example=123
-    ),
-    person: Person = Body(...),
-    location: Location = Body(...)
-):
-    results = person.dict()
-    results.update(location.dict())
-    return results

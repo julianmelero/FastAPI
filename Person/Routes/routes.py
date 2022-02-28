@@ -8,7 +8,7 @@ from fastapi import APIRouter
 
 
 # Clases
-from ..Classes.personClass import Person,PersonOut
+from ..Classes.personClass import Person,PersonOut,Location
 
 
 router = APIRouter(prefix="/person")
@@ -53,3 +53,21 @@ def show_person(
 @router.post("/new", tags=["Person"], response_model=PersonOut)
 def create_person(person: Person = Body(...)):
     return person
+
+
+
+@router.put("/person/{person_id}")
+def update_person(
+    person_id: int = Path(
+        ...,
+        title="Person ID",
+        description="This is the person ID.",
+        gt=0,
+        example=123
+    ),
+    person: Person = Body(...),
+    location: Location = Body(...)
+):
+    results = person.dict()
+    results.update(location.dict())
+    return results
