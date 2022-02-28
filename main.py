@@ -1,5 +1,7 @@
 # from .dependencies import FastAPI, Body,Path
-from fastapi import FastAPI
+from logging import root
+from sys import prefix
+from fastapi import APIRouter, FastAPI
 from fastapi import Body, Query, Path, status
 
 # Person Classes
@@ -7,14 +9,13 @@ from Person.Classes.personClass import Person,Location
 
 
 # Routes
-from Person.Routes import getRoutes,postRoutes
+from Person.Routes import routes
 
 
 app = FastAPI()
-
-
-app.include_router(getRoutes.router)
-app.include_router(postRoutes.router)
+# app.mount("/api/v1",  app)
+app.include_router(routes.router,prefix="/api/v1")
+app.include_router(routes.router, prefix="/api/v1")
 
 
 
